@@ -7,7 +7,7 @@ permalink: /projects/coding/ScheduleBot/
 related_posts:
     -
 sitemap: false
-image: \assets\img/schedulebot.png
+image: \assets\project/schedulebot.png
 ---
 
 # ScheduleBot.jl
