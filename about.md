@@ -18,19 +18,19 @@ Outside of work, I have a second degree black belt in Tae Kwon Do, love playing 
 ## Projects
 <div id = "my-project-cards">
 <div id = "project-cards">
-    <a href = "https://projects/data science/Capstone" class = "project-card">
+    <a href = "/projects/data science/Capstone" class = "project-card">
     <div class = "project-card-border"></div>
     <div class = "project-card-content"><img src="\assets\img\climate.png" alt="Climate Bench Report Preview"><p>Emulating Climate Change with Deep Learning</p></div>
     </a>
-    <a href = "https://projects/data science/IoT" class = "project-card">
+    <a href = "/projects/data science/IoT" class = "project-card">
     <div class = "project-card-border"></div>
     <div class = "project-card-content"><img src="\assets\img\iot.png" alt="IOT"><p>Debugging Internal States of IoT devices</p></div>
     </a>
-    <a href = "https://projects/coding/ScheduleBot" class = "project-card">
+    <a href = "/projects/coding/ScheduleBot" class = "project-card">
     <div class = "project-card-border"></div>
     <div class = "project-card-content"><img src="\assets\img\schedulebot.png" alt="ScheduleBot"><p>ScheduleBot.jl</p></div>
     </a>
-    <a href = "https://projects/data science/HAR" class = "project-card">
+    <a href = "/projects/data science/HAR" class = "project-card">
     <div class = "project-card-border"></div>
     <div class = "project-card-content"><img src="\assets\img\har.png"><p>Smartphone Human Activity Recognition</p></div>
     </a>
