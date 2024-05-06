@@ -20,19 +20,19 @@ Outside of work, I have a second degree black belt in Tae Kwon Do, love playing 
 <div id = "project-cards">
     <a href = "/projects/data science/Capstone" class = "project-card">
     <div class = "project-card-border"></div>
-    <div class = "project-card-content"><img src="\assets\project\climate.png" alt="Climate Bench Report Preview"><p>Emulating Climate Change with Deep Learning</p></div>
+    <div class = "project-card-content"><img src="\assets\img\climate.png" alt="Climate Bench Report Preview"><p>Emulating Climate Change with Deep Learning</p></div>
     </a>
     <a href = "/projects/data science/IoT" class = "project-card">
     <div class = "project-card-border"></div>
-    <div class = "project-card-content"><img src="\assets\project\iot.png" alt="IOT"><p>Debugging Internal States of IoT devices</p></div>
+    <div class = "project-card-content"><img src="\assets\img\iot.png" alt="IOT"><p>Debugging Internal States of IoT devices</p></div>
     </a>
     <a href = "/projects/coding/ScheduleBot" class = "project-card">
     <div class = "project-card-border"></div>
-    <div class = "project-card-content"><img src="\assets\project\schedulebot.png" alt="ScheduleBot"><p>ScheduleBot.jl</p></div>
+    <div class = "project-card-content"><img src="\assets\img\schedulebot.png" alt="ScheduleBot"><p>ScheduleBot.jl</p></div>
     </a>
     <a href = "/projects/data science/HAR" class = "project-card">
     <div class = "project-card-border"></div>
-    <div class = "project-card-content"><img src="\assets\project\har.png"><p>Smartphone Human Activity Recognition</p></div>
+    <div class = "project-card-content"><img src="\assets\img\har.png"><p>Smartphone Human Activity Recognition</p></div>
     </a>
 </div>
 </div>
