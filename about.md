@@ -18,9 +18,9 @@ Outside of work, I have a second degree black belt in Tae Kwon Do, love playing 
 ## Projects
 <div id = "my-project-cards">
 <div id = "project-cards">
-    <a href = "/projects/data science/Capstone" class = "project-card">
+    <a href = "{{ '/projects/data science/Capstone' | prepend: site.relative_url }}" class = "project-card">
     <div class = "project-card-border"></div>
-    <div class = "project-card-content"><img src="{{ 'assets/img/climate.png' | prepend: site.relative_url }}" alt="Climate Bench Report Preview"><p>Emulating Climate Change with Deep Learning</p></div>
+    <div class = "project-card-content"><img src="\assets\img\climate.png" alt="Climate Bench Report Preview"><p>Emulating Climate Change with Deep Learning</p></div>
     </a>
     <a href = "/projects/data science/IoT" class = "project-card">
     <div class = "project-card-border"></div>
