@@ -1,7 +1,7 @@
 # The primary author of this blog.
 # Must be the same as `author` in `_config.yml`.
 # Change `author1` to your shortname.
-author1:
+keith:
   name:              Keith Kwong
   email:             khk32887134@gmail.com
 
@@ -25,7 +25,7 @@ author1:
   # Comment/uncommet to show/hide
   # Rearrange to change the order in which they appear
   social:
-    twitter:         <username>
+    # twitter:         <username>
     github:          khkwong
     email:           khk32887134@gmail.com
     # rss:             https://<url>/feed.xml
