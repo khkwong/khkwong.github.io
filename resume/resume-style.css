@@ -21,6 +21,35 @@
     background-color: rgb(231, 231, 231);
     padding: 2%;
     border-radius: 12px;
+    margin-bottom: 5%;
+}
+
+
+.edu_desc::before {
+    content: "Relevant Coursework";
+    font-weight: bold;
+    font-size: medium;
+    color: rgb(171, 167, 167);
+    margin-right: 10px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.edu_desc {
+    background-color: rgb(231, 231, 231);
+    padding: 1%;
+    border-radius: 12px;
+    margin-bottom: 5%;
+}
+
+ul.flex-list {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 13px;
+}
+li.flex-listi {
+    width: 30%;
 }
 
 .seperator {
@@ -35,3 +64,13 @@
     justify-content: space-between;
     margin: 20px 0;
 }
+
+.resume {
+    width: 100%;
+    display:flex;
+}
+
+.column-right{
+    margin-left:5%;
+}
+
