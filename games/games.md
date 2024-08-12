@@ -35,9 +35,11 @@ permalink: /games/
 * [Mario Kart](https://mariokart8.nintendo.com) - Came with the Switch, still think Mario Kart Wii is the best
 
 ## Gacha Games (Don't look, you can leave now)
+* [Zenless Zone Zero](https://zenless.hoyoverse.com/ua) - Why does Hoyoverse have such a grip on me man, this games is too pretty.
 * [Honkai Star Rail](https://hsr.hoyoverse.com/en-us/) - Latest gacha obsession, no I will not be taking any further questions.
-* [Genshin Impact](https://genshin.hoyoverse.com/en/) - I stopped playing, come back every now and again.
+* [Genshin Impact](https://genshin.hoyoverse.com/en/) - I stopped playing religiously, come back every now and again.
 * [Puzzles and Dragons](https://www.puzzleanddragons.us) - Legacy gacha game for me, played it ever since middle school.
+* [Wuthering Waves](wutheringwaves.kurogames-ads.com) - Like the gameplay, honestly prefer this combat loop better than the Hoyo games, unfortunately everything else falls a bit short forme.
 
 ## Other
 * Pokemon (Gen 4 was the best, Gen 4 remake sucks)
