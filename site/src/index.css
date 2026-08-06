@@ -1,0 +1,102 @@
+:root {
+  --text: #1f2023;
+  --muted: #6b6d76;
+  --bg: #ffffff;
+  --surface: #f8f8fa;
+  --border: #e4e4e8;
+  --accent: #7c3aed;
+
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+
+  font: 16px/1.55 var(--sans);
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e7e7ea;
+    --muted: #9a9ba5;
+    --bg: #121215;
+    --surface: #1a1a1f;
+    --border: #2b2c33;
+    --accent: #a78bfa;
+  }
+}
+
+:root[data-theme="dark"] {
+  --text: #e7e7ea;
+  --muted: #9a9ba5;
+  --bg: #121215;
+  --surface: #1a1a1f;
+  --border: #2b2c33;
+  --accent: #a78bfa;
+}
+
+:root[data-theme="light"] {
+  --text: #1f2023;
+  --muted: #6b6d76;
+  --bg: #ffffff;
+  --surface: #f8f8fa;
+  --border: #e4e4e8;
+  --accent: #7c3aed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+a {
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text);
+  line-height: 1.2;
+}
+
+h2 {
+  margin-top: 2rem;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
