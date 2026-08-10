@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 import "./NavBar.css";
 
 const links = [
@@ -28,6 +29,7 @@ export default function NavBar() {
             </NavLink>
           ))}
         </nav>
+        <ThemeToggle />
       </div>
     </header>
   );
