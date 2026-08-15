@@ -22,6 +22,20 @@
   background: var(--border);
 }
 
+.project-card-img-placeholder {
+  width: 100%;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--surface), var(--border));
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
 .project-card-body {
   padding: 1rem 1.1rem 1.25rem;
   display: flex;

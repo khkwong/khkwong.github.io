@@ -14,9 +14,6 @@ export default function NavBar() {
   return (
     <header className="nav">
       <div className="nav-inner">
-        <NavLink to="/" className="nav-brand" end>
-          Keith Kwong
-        </NavLink>
         <nav className="nav-links">
           {links.map((link) => (
             <NavLink

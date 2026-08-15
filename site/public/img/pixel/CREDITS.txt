@@ -1,0 +1,5 @@
+grass-top.png, dirt.png, coin.png, digits/0.png-9.png, cloud_tiny/small/medium/large/xlarge.png (composed from tiles 153-155)
+
+Sourced from Kenney's "Pixel Platformer" asset pack (https://kenney.nl/assets/pixel-platformer)
+License: Creative Commons Zero (CC0) — public domain, no attribution required.
+Credit given anyway: Kenney (www.kenney.nl)

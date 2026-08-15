@@ -42,6 +42,11 @@
 
 body {
   margin: 0;
+  background:
+    radial-gradient(circle at 15% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%),
+    radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 45%),
+    var(--bg);
+  background-attachment: fixed;
 }
 
 #root {

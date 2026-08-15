@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -9,6 +9,9 @@ import Resume from "./pages/Resume";
 import Games from "./pages/Games";
 
 export default function App() {
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
+
   return (
     <>
       <NavBar />
@@ -22,7 +25,7 @@ export default function App() {
           <Route path="/games" element={<Games />} />
         </Routes>
       </main>
-      <Footer />
+      {!isHome && <Footer />}
     </>
   );
 }

@@ -10,13 +10,53 @@ export type Project = {
   slug: string;
   title: string;
   category: string;
-  image: string;
+  image?: string;
   summary: string;
   body: ProjectBlock[];
   links: ProjectLink[];
 };
 
 export const projects: Project[] = [
+  {
+    slug: "remnant2-mods",
+    title: "Remnant 2 Mods",
+    category: "Game Modding",
+    summary:
+      "A suite of quality-of-life mods for Remnant 2, built by hooking into the game's own UE4SS/Lua systems instead of reimplementing them from scratch.",
+    body: [
+      {
+        type: "p",
+        text: "Remnant 2 Mods is a suite of quality-of-life mods for the game Remnant 2, built with UE4SS and Lua. The through-line across all four: hook into the game's existing systems and reuse its own logic wherever possible, rather than building parallel systems from scratch.",
+      },
+      { type: "h2", text: "EquipmentSearch" },
+      {
+        type: "p",
+        text: "Adds a live search bar across nearly every item screen — amulets, rings, armor, weapons, relics, mutators, inventory — by hooking the game's existing Widget_InventorySearchFilter text-changed delegate rather than building a new UI element. The trickiest part wasn't the search itself: tracing showed the vanilla \"clear\" (X) button empties the textbox without firing the normal OnTextChanged event, an edge case the mod has to compensate for explicitly. The filter also re-applies itself after the game's own list-build functions run, so a vanilla inventory refresh doesn't silently wipe out the search results.",
+      },
+      { type: "h2", text: "LoadoutNamer" },
+      {
+        type: "p",
+        text: "Lets you name each loadout slot so you stop mixing them up. It hooks mouse-enter/leave on loadout tiles and a configurable hotkey to spawn an editable textbox directly onto the tile's widget tree, persists names to a local file keyed per character ID (with a one-time migration for names saved before that keying existed), and reuses the game's own key-glyph widget to add an \"F2 Rename\" hint that matches vanilla UI conventions instead of a custom-styled label.",
+      },
+      { type: "h2", text: "MoreLoadoutSlots" },
+      {
+        type: "p",
+        text: "Bumps the loadout slot count from a handful to 20 by hooking into the panel's spawn events and dynamically constructing additional tile widgets at runtime, instead of hand-editing a fixed layout. Each new tile is wired into the game's own click/save/delete delegates so the extra slots inherit vanilla save, load, and tooltip behavior for free — and a defensive fallback keeps multiplayer sessions from breaking if the usual player-controller lookup comes back empty.",
+      },
+      { type: "h2", text: "PrismLegendaryReroller" },
+      {
+        type: "p",
+        text: "Lets you reroll the Prism's Legendary bonus without re-grinding the last level. It hooks the native flush function used when a legendary-bonus cleanse happens — identified by the Prism sitting at level 51 right before the flush, the only state a Mythic segment can exist in — then calls the game's own leveling functions to instantly restore it to 51 afterward. Getting there meant disambiguating two similarly-named native functions purely from their reflection signatures, then confirming the fix in a live playthrough rather than trusting log output alone.",
+      },
+    ],
+    links: [
+      { label: "Github", url: "https://github.com/khkwong/Remnant2Mods" },
+      { label: "EquipmentSearch (Nexus Mods)", url: "https://www.nexusmods.com/remnant2/mods/222" },
+      { label: "LoadoutNamer (Nexus Mods)", url: "https://www.nexusmods.com/remnant2/mods/221" },
+      { label: "MoreLoadoutSlots (Nexus Mods)", url: "https://www.nexusmods.com/remnant2/mods/220" },
+      { label: "PrismLegendaryReroller (Nexus Mods)", url: "https://www.nexusmods.com/remnant2/mods/224" },
+    ],
+  },
   {
     slug: "capstone",
     title: "Emulating the Effects of Climate Change with Deep Learning",
@@ -116,6 +156,45 @@ export const projects: Project[] = [
       },
     ],
     links: [{ label: "Github", url: "https://github.com/khkwong/ScheduleBot?tab=readme-ov-file" }],
+  },
+  {
+    slug: "datahacks",
+    title: "DataHacks",
+    category: "Hackathon",
+    summary: "Exploratory data analysis on text from multiple religious texts for a hackathon dataset challenge.",
+    body: [
+      {
+        type: "p",
+        text: "Performed exploratory data analysis on text pulled from multiple religious texts, comparing word counts across the different sources and charting them by similarity.",
+      },
+    ],
+    links: [{ label: "Github", url: "https://github.com/khkwong/datahacks2021" }],
+  },
+  {
+    slug: "ronald-reagan-remembers",
+    title: "RonaldReaganRemembers",
+    category: "Hackathon",
+    summary: "Congressional App Challenge submission — I built the chatting feature.",
+    body: [
+      {
+        type: "p",
+        text: "A Congressional App Challenge submission. I handled the chatting feature.",
+      },
+    ],
+    links: [{ label: "Github", url: "https://github.com/khkwong/RonaldReaganRemembers" }],
+  },
+  {
+    slug: "delta-litter",
+    title: "DeltaLitter",
+    category: "Hackathon",
+    summary: "Congressional App Challenge submission — I built the image recognition feature.",
+    body: [
+      {
+        type: "p",
+        text: "A Congressional App Challenge submission. I handled the image recognition feature.",
+      },
+    ],
+    links: [{ label: "Github", url: "https://github.com/jeffreyL02/DeltaLitter" }],
   },
 ];
 

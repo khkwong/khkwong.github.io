@@ -43,9 +43,13 @@ export default function Resume() {
               <div key={i} className="resume-entry">
                 <div className="resume-entry-head">
                   <div>
-                    <a href={job.url} target="_blank" rel="noreferrer">
+                    {job.url ? (
+                      <a href={job.url} target="_blank" rel="noreferrer">
+                        <strong>{job.company}</strong>
+                      </a>
+                    ) : (
                       <strong>{job.company}</strong>
-                    </a>
+                    )}
                     <div>{job.role}</div>
                   </div>
                   <div className="resume-entry-meta">
@@ -68,9 +72,13 @@ export default function Resume() {
               <div key={i} className="resume-entry">
                 <div className="resume-entry-head">
                   <div>
-                    <a href={edu.url} target="_blank" rel="noreferrer">
+                    {edu.url ? (
+                      <a href={edu.url} target="_blank" rel="noreferrer">
+                        <strong>{edu.school}</strong>
+                      </a>
+                    ) : (
                       <strong>{edu.school}</strong>
-                    </a>
+                    )}
                     <div>{edu.degree}</div>
                   </div>
                   <div className="resume-entry-meta">
@@ -78,11 +86,13 @@ export default function Resume() {
                     <div>{edu.location}</div>
                   </div>
                 </div>
-                <ul className="coursework-list">
-                  {edu.coursework.map((course, j) => (
-                    <li key={j}>{course}</li>
-                  ))}
-                </ul>
+                {edu.coursework.length > 0 && (
+                  <ul className="coursework-list">
+                    {edu.coursework.map((course, j) => (
+                      <li key={j}>{course}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </section>

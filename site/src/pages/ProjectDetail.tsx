@@ -20,7 +20,9 @@ export default function ProjectDetail() {
       <Link to="/projects" className="back-link">
         ← All projects
       </Link>
-      <img src={project.image} alt={project.title} className="project-detail-img" />
+      {project.image && (
+        <img src={project.image} alt={project.title} className="project-detail-img" />
+      )}
       <span className="project-card-category">{project.category}</span>
       <h1>{project.title}</h1>
 

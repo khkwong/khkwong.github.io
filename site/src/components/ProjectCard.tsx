@@ -5,7 +5,11 @@ import "./ProjectCard.css";
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <Link to={`/projects/${project.slug}`} className="project-card">
-      <img src={project.image} alt={project.title} className="project-card-img" />
+      {project.image ? (
+        <img src={project.image} alt={project.title} className="project-card-img" />
+      ) : (
+        <div className="project-card-img-placeholder">{project.category}</div>
+      )}
       <div className="project-card-body">
         <span className="project-card-category">{project.category}</span>
         <h3>{project.title}</h3>

@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
 import { projects } from "../data/projects";
 import ProjectCard from "../components/ProjectCard";
+import CoinField from "../components/CoinField";
+import HomeScene from "../components/HomeScene";
 import "./Home.css";
 
 export default function Home() {
   const featured = projects.slice(0, 3);
 
   return (
-    <div className="page">
+    <div className="page home-page">
+      <HomeScene />
+      <CoinField />
       <section className="hero">
         <h1>Hi, I'm Keith Kwong.</h1>
         <p>
