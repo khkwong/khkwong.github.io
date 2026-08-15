@@ -18,6 +18,7 @@
   --s-terrain: 3; /* 18px wall/dirt tiles, 14px grass tile */
   --s-char: 4; /* 24px walking-character frames */
   --s-portrait: 3; /* 64px portrait */
+  --s-ui: 3; /* 32px UI panels/banners, 16px close button */
 
   font: 16px/1.55 var(--sans);
   color-scheme: light;
@@ -60,6 +61,7 @@
     --s-terrain: 2;
     --s-char: 2;
     --s-portrait: 2;
+    --s-ui: 2;
   }
 }
 

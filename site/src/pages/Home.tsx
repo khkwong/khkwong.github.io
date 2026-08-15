@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import AboutModal from "../components/AboutModal";
 import CoinField from "../components/CoinField";
 import HomeScene from "../components/HomeScene";
 import "./Home.css";
@@ -11,6 +12,9 @@ const navSigns = [
 ];
 
 export default function Home() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   return (
     <div className="title-screen">
       <HomeScene />
@@ -40,6 +44,12 @@ export default function Home() {
           </Link>
         ))}
       </nav>
+
+      {/* Driven by the URL rather than local state, so /about stays linkable
+          and the browser Back button closes the dialog for free. Closing goes
+          to "/" instead of history.back() — a direct visit to /about has no
+          previous entry on this site to return to. */}
+      {pathname === "/about" && <AboutModal onClose={() => navigate("/")} />}
     </div>
   );
 }

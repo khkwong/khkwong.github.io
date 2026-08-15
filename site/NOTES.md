@@ -23,6 +23,7 @@ defines:
 | `--s-terrain`   | 3       | 18px wall/dirt tiles, 14px grass tile       |
 | `--s-char`      | 4       | 24px walking-character frames               |
 | `--s-portrait`  | 3       | 64px portrait                               |
+| `--s-ui`        | 3       | 32px UI panels/banners, 16px close button   |
 
 Stepped down at `max-width: 900px` and `max-width: 600px`.
 
@@ -43,6 +44,7 @@ they're chrome, not sprites, and should stay a fixed thickness.
 ```
 sky (-3) < sun/moon (-2) < wall (-1) < signs (-1, later in DOM)
   < grass = title = portrait = guy (0) < coins (1) < coin HUD (5)
+  < About dialog (10)
 ```
 
 Three of these are load-bearing:
@@ -118,6 +120,58 @@ both frames into one sheet and drive it with `steps(2)` on `background-position`
 — that snaps between frames the way real sprite animation does, where a CSS
 transform tween would look wrong. Keeping the animation on `background-position`
 also leaves `transform` free for flipping and movement.
+
+---
+
+## The About dialog
+
+About has no page of its own. `/about` is a real route, but it renders `Home`
+with `AboutModal` open over the title screen. Keeping it a route rather than
+component state buys three things: the URL stays linkable, browser Back closes
+the dialog, and the signpost stays an ordinary `<Link>` so open-in-new-tab
+still works. `App.tsx` treats `/` and `/about` alike when deciding to hide the
+nav bar and footer.
+
+Closing navigates to `/` rather than `history.back()` — someone arriving at
+`/about` directly has no previous entry on this site to go back to.
+
+This pattern does **not** generalise to the other three signs. Projects has
+detail routes, Resume has real length, and Games has its own content; a dialog
+would strangle all three. They need their own answer for looking like they
+belong to the title screen.
+
+---
+
+## Working with the UI pack
+
+Dialog chrome comes from [Kenney's UI Pack - Pixel Adventure](https://kenney.nl/assets/ui-pack-pixel-adventure)
+(CC0), a different pack from the platformer tiles. Sprites in
+`public/img/pixel/ui/`, indices recorded in `public/img/pixel/CREDITS.txt`.
+
+**These are 9-slices, not textures.** A panel is a 32×32 sprite with a 6px
+frame; the frame must stay a fixed thickness while the middle grows to fit
+content. That is `border-image` with `border-image-slice: 6 fill`, *not*
+`background-repeat` — tiling one smears the corner art. Crispness comes from
+`border-width` being a whole multiple of the 6px slice, hence `--s-ui`.
+
+`border-image-repeat: stretch` is deliberate. Each edge slice is a uniform band
+along its length, so stretching leaves no artifact, whereas `round` rescales by
+a fractional amount and softens the pixels — the opposite of what you'd expect
+from the names.
+
+Two things specific to this pack:
+
+- **Banner tiles 56/57/58 are a cap/middle/cap set**, like the wall planks. The
+  middle repeats cleanly; the tails live only on the caps. Verify any new set
+  by rendering `left-mid-mid-mid-right` before wiring it up.
+- **The banner art is not vertically centred in its sprite box** — the lower
+  third is tail. `.pixel-modal-banner` carries asymmetric padding so text
+  centres on the ribbon body rather than the box.
+
+The raw pack is unpacked at `src/assets/kenney_ui-pack-pixel-adventure/`
+(~876KB, 519 files). Nothing imports it — Vite only bundles what's referenced,
+so it costs repo size but not bundle size. Safe to delete once you're confident
+no more tiles are needed.
 
 ---
 

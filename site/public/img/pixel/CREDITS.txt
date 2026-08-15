@@ -11,3 +11,14 @@ Credit given anyway: Kenney (www.kenney.nl)
 
 portrait.png — downsampled from img/headshot.png (own photo), not from the pack.
 sun.png, moon.webp — sourced separately.
+
+---
+
+ui/ — panel-tan.png (Large tile 0), panel-brown.png (Large tile 1),
+banner-left/mid/right.png (Large tiles 56-58), btn-close.png (Small tile 4),
+all from the "Thick outline" set.
+
+Sourced from Kenney's "UI Pack - Pixel Adventure"
+(https://kenney.nl/assets/ui-pack-pixel-adventure)
+License: Creative Commons Zero (CC0) — public domain, no attribution required.
+Credit given anyway: Kenney (www.kenney.nl)

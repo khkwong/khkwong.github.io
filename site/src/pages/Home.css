@@ -23,6 +23,7 @@
  * Layer order inside .title-screen (which isolates its own stacking context):
  *   sky (-3) < sun/moon (-2) < wall (-1) < signs (-1, later in DOM)
  *     < grass = title = portrait = guy (0) < coins (1) < coin HUD (5)
+ *     < About dialog (10)
  * Two deliberate choices here:
  *  - Signs sit behind the grass so their posts tuck into the ground and slide
  *    up out of it on hover, rather than floating in front of the dirt.
