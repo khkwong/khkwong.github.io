@@ -1,0 +1,125 @@
+/*
+ * Inner-page frame. `isolation: isolate` is load-bearing, exactly as on
+ * .title-screen: the sky sits at z-index -3, and without a stacking context
+ * here that negative value escapes to the root. In the root context, negative
+ * z-index descendants paint before in-flow block backgrounds, so body's
+ * gradient from index.css covers the sky entirely. Isolating keeps the -3
+ * relative to this element, above the page background and below the content.
+ */
+.page-chrome {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  padding: 1.5rem 1.5rem 4rem;
+}
+
+/* Just breathing room under the last element — not clearance for the grass.
+   Content paints over the floor now, so it can't be buried, and reserving a
+   full 22vh here made every short page taller than the viewport and gave it a
+   scrollbar with nothing to scroll to. */
+.page-chrome.has-ground {
+  padding-bottom: 8vh;
+}
+
+.page-banner {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 2rem);
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  flex-wrap: wrap;
+}
+
+/* Same outlined treatment as the title screen's heading so page titles read as
+   part of the scene rather than as document text laid over it. */
+.page-banner-title {
+  margin: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(1rem, 3vw, 1.9rem);
+  line-height: 1.3;
+  color: #fff;
+  text-shadow:
+    -2px 0 0 #1b2a4a,
+    2px 0 0 #1b2a4a,
+    0 -2px 0 #1b2a4a,
+    0 2px 0 #1b2a4a,
+    4px 5px 0 rgba(0, 0, 0, 0.28);
+}
+
+.corner-celestial {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.75rem;
+  z-index: 4;
+  width: var(--sky-body-size);
+  height: var(--sky-body-size);
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.corner-celestial:hover,
+.corner-celestial:focus-visible {
+  transform: scale(1.1);
+  outline: none;
+}
+
+.corner-body {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Planted at the left edge along the same grass line the title screen's nav
+   uses — the 14px offset sinks the post into the turf. Keep in sync with
+   .grass-floor height (22vh) in HomeScene.css.
+
+   Both the sign and the grass sit at negative z-indexes so page content, which
+   is in normal flow, always paints over them — otherwise a fixed floor buries
+   whatever content happens to line up with it. Sign below grass keeps the post
+   tucked into the turf. Same relationship as the title screen, shifted down one
+   so the content clears both. */
+.page-signpost {
+  position: fixed;
+  left: clamp(1rem, 4vw, 3rem);
+  bottom: calc(22vh - 14px);
+  z-index: -2;
+  /* Hidden by default; the wide-viewport query below turns it on. Defaulting
+     to hidden means the fallback ribbon is what shows if that query never
+     matches, rather than both or neither. */
+  display: none;
+}
+
+.page-chrome.has-ground .grass-floor {
+  z-index: -1;
+}
+
+/* The signpost's right edge lands around 145px (up to 48px of offset plus a
+   ~97px board). The content column starts at (100vw - 1100px) / 2, so the two
+   stop colliding at about 1440px. Below that the sign would sit under the
+   content — it's at a negative z-index, so it doesn't just overlap, it
+   disappears — and the header ribbon stands in for it instead. */
+@media (min-width: 1440px) {
+  .page-signpost {
+    display: flex;
+  }
+
+  .page-banner-home {
+    display: none;
+  }
+}
+
+/* The corner control overlaps the banner row on narrow screens. */
+@media (max-width: 700px) {
+  .page-banner {
+    padding-right: calc(var(--sky-body-size) + 1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corner-celestial {
+    transition: none;
+  }
+}

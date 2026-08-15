@@ -6,10 +6,21 @@ export type ProjectBlock =
 
 export type ProjectLink = { label: string; url: string };
 
+/** What the work is, on one axis. "Hackathon" was a venue, not a category. */
+export type Category = "Data Science" | "Game Modding" | "Web & Tools";
+
+/**
+ * "featured" gets a card and a detail page. "archive" is a one-line entry that
+ * links straight out — the page is a showcase first and a record second, and a
+ * one-sentence project given a full card makes the real work harder to find.
+ */
+export type Tier = "featured" | "archive";
+
 export type Project = {
   slug: string;
   title: string;
-  category: string;
+  category: Category;
+  tier: Tier;
   image?: string;
   summary: string;
   body: ProjectBlock[];
@@ -21,6 +32,8 @@ export const projects: Project[] = [
     slug: "remnant2-mods",
     title: "Remnant 2 Mods",
     category: "Game Modding",
+    tier: "featured",
+    image: "/img/remnant2.jpg",
     summary:
       "A suite of quality-of-life mods for Remnant 2, built by hooking into the game's own UE4SS/Lua systems instead of reimplementing them from scratch.",
     body: [
@@ -61,6 +74,7 @@ export const projects: Project[] = [
     slug: "capstone",
     title: "Emulating the Effects of Climate Change with Deep Learning",
     category: "Data Science",
+    tier: "featured",
     image: "/img/climate.png",
     summary:
       "UCSD senior capstone extending Professor Duncan Watson-Parris's ClimateBench framework with improved climate emulation models.",
@@ -101,6 +115,7 @@ export const projects: Project[] = [
     slug: "iot",
     title: "Debugging Internal States of IoT Devices",
     category: "Data Science",
+    tier: "featured",
     image: "/img/iot.png",
     summary:
       "UCSD research project classifying the internal states of IoT devices from external sensor signals (RF, network, power).",
@@ -125,6 +140,7 @@ export const projects: Project[] = [
     slug: "har",
     title: "Smartphone Human Activity Recognition",
     category: "Data Science",
+    tier: "featured",
     image: "/img/har.png",
     summary:
       "Trained and compared machine learning models to classify human physical activity from smartphone accelerometer and gyroscope data.",
@@ -145,7 +161,8 @@ export const projects: Project[] = [
   {
     slug: "schedulebot",
     title: "ScheduleBot.jl",
-    category: "Coding",
+    category: "Web & Tools",
+    tier: "featured",
     image: "/img/schedulebot.png",
     summary:
       "A Discord bot built for JuliaCon 2022 to remind participants when talks were starting based on a dynamic schedule.",
@@ -160,7 +177,8 @@ export const projects: Project[] = [
   {
     slug: "datahacks",
     title: "DataHacks",
-    category: "Hackathon",
+    category: "Data Science",
+    tier: "archive",
     summary: "Exploratory data analysis on text from multiple religious texts for a hackathon dataset challenge.",
     body: [
       {
@@ -173,7 +191,8 @@ export const projects: Project[] = [
   {
     slug: "ronald-reagan-remembers",
     title: "RonaldReaganRemembers",
-    category: "Hackathon",
+    category: "Web & Tools",
+    tier: "archive",
     summary: "Congressional App Challenge submission — I built the chatting feature.",
     body: [
       {
@@ -186,7 +205,8 @@ export const projects: Project[] = [
   {
     slug: "delta-litter",
     title: "DeltaLitter",
-    category: "Hackathon",
+    category: "Web & Tools",
+    tier: "archive",
     summary: "Congressional App Challenge submission — I built the image recognition feature.",
     body: [
       {
@@ -200,4 +220,36 @@ export const projects: Project[] = [
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
+}
+
+/*
+ * Both tiers are fixed-size shelves, not growing lists. A page of ten equal
+ * cards flattens back into "everything looks the same" — the problem tiering
+ * exists to solve — so a new project has to displace an existing one rather
+ * than joining it. Retiring the displaced entry is a one-word `tier` edit.
+ *
+ * The limits warn rather than slice: silently dropping a project you just
+ * added would be a genuinely confusing bug to track down. If the archive ever
+ * outgrows its shelf too, that's the point to build the full "see everything"
+ * list as its own view.
+ */
+export const FEATURED_LIMIT = 6;
+export const ARCHIVE_LIMIT = 6;
+
+export const featuredProjects = projects.filter((p) => p.tier === "featured");
+export const archivedProjects = projects.filter((p) => p.tier === "archive");
+
+if (import.meta.env.DEV) {
+  if (featuredProjects.length > FEATURED_LIMIT) {
+    console.warn(
+      `${featuredProjects.length} featured projects exceeds the shelf of ${FEATURED_LIMIT}. ` +
+        `Move the weakest one to tier: "archive".`,
+    );
+  }
+  if (archivedProjects.length > ARCHIVE_LIMIT) {
+    console.warn(
+      `${archivedProjects.length} archived projects exceeds the shelf of ${ARCHIVE_LIMIT}. ` +
+        `Time for a full project list view, or drop the oldest.`,
+    );
+  }
 }

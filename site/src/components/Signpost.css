@@ -1,0 +1,55 @@
+/* Signpost art, shared by the title screen's nav and the inner-page back link.
+   Positioning lives with whoever uses it — this file only draws the sign.
+   Borders and post width are plain px on purpose: they're chrome, not sprites,
+   and should stay a fixed thickness at every scale. */
+.sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.12s ease;
+}
+
+.sign:hover,
+.sign:focus-visible {
+  transform: translateY(-5px);
+}
+
+.sign:focus-visible {
+  outline: none;
+}
+
+.sign-board {
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(0.55rem, 1.5vw, 0.85rem);
+  color: #ffeec2;
+  background: #a9713c;
+  border: 4px solid #5d3a1a;
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.25),
+    inset 4px 4px 0 rgba(255, 255, 255, 0.18);
+  padding: 0.85rem 1.1rem;
+  white-space: nowrap;
+}
+
+.sign:hover .sign-board {
+  background: #bd8047;
+}
+
+.sign:focus-visible .sign-board {
+  border-color: #fff3c4;
+}
+
+.sign-post {
+  width: 14px;
+  height: clamp(26px, 5vh, 50px);
+  background: #7a4f24;
+  border-left: 4px solid #5d3a1a;
+  border-right: 4px solid #5d3a1a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign {
+    transition: none;
+  }
+}

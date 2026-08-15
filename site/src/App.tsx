@@ -12,11 +12,14 @@ export default function App() {
   // /about is the title screen with a dialog open over it, not a page of its
   // own — it keeps a real URL so it stays linkable and Back closes the dialog.
   const isTitleScreen = pathname === "/" || pathname === "/about";
+  // Pages already carrying their own pixel chrome. Resume and Games still use
+  // the old nav bar until they get the same treatment.
+  const hasPixelChrome = isTitleScreen || pathname.startsWith("/projects");
 
   return (
     <>
       {/* Home is a title screen — its signpost nav replaces the top bar. */}
-      {!isTitleScreen && <NavBar />}
+      {!hasPixelChrome && <NavBar />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -27,7 +30,7 @@ export default function App() {
           <Route path="/games" element={<Games />} />
         </Routes>
       </main>
-      {!isTitleScreen && <Footer />}
+      {!hasPixelChrome && <Footer />}
     </>
   );
 }

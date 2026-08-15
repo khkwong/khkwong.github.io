@@ -1,5 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getProjectBySlug } from "../data/projects";
+import PageChrome from "../components/PageChrome";
+import RibbonLink from "../components/RibbonLink";
 import "./ProjectDetail.css";
 
 export default function ProjectDetail() {
@@ -8,46 +10,58 @@ export default function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="page">
-        <h1>Project not found</h1>
-        <Link to="/projects">Back to projects</Link>
-      </div>
+      <PageChrome title="Not Found" signpost={false}>
+        <div className="project-detail">
+          <p className="project-detail-meta">
+            <RibbonLink to="/projects" label="Projects" />
+          </p>
+          <p>That project doesn't exist.</p>
+        </div>
+      </PageChrome>
     );
   }
 
   return (
-    <div className="page">
-      <Link to="/projects" className="back-link">
-        ← All projects
-      </Link>
-      {project.image && (
-        <img src={project.image} alt={project.title} className="project-detail-img" />
-      )}
-      <span className="project-card-category">{project.category}</span>
-      <h1>{project.title}</h1>
+    <PageChrome title={project.title} signpost={false}>
+      <article className="project-detail">
+        <p className="project-detail-meta">
+          <RibbonLink to="/projects" label="Projects" />
+          <span className="project-detail-category">{project.category}</span>
+        </p>
 
-      {project.body.map((block, i) => {
-        if (block.type === "p") return <p key={i}>{block.text}</p>;
-        if (block.type === "h2") return <h2 key={i}>{block.text}</h2>;
-        if (block.type === "h3") return <h3 key={i}>{block.text}</h3>;
-        return (
-          <ul key={i}>
-            {block.items.map((item, j) => (
-              <li key={j}>{item}</li>
+        {project.image && (
+          <img src={project.image} alt="" className="project-detail-img" />
+        )}
+
+        {project.body.map((block, i) => {
+          if (block.type === "p") return <p key={i}>{block.text}</p>;
+          if (block.type === "h2") return <h2 key={i}>{block.text}</h2>;
+          if (block.type === "h3") return <h3 key={i}>{block.text}</h3>;
+          return (
+            <ul key={i}>
+              {block.items.map((item, j) => (
+                <li key={j}>{item}</li>
+              ))}
+            </ul>
+          );
+        })}
+
+        {project.links.length > 0 && (
+          <div className="project-links">
+            {project.links.map((link) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="pixel-btn"
+              >
+                {link.label}
+              </a>
             ))}
-          </ul>
-        );
-      })}
-
-      {project.links.length > 0 && (
-        <div className="project-links">
-          {project.links.map((link) => (
-            <a key={link.url} href={link.url} target="_blank" rel="noreferrer" className="button button-secondary">
-              {link.label}
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+      </article>
+    </PageChrome>
   );
 }

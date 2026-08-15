@@ -1,7 +1,8 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AboutModal from "../components/AboutModal";
 import CoinField from "../components/CoinField";
 import HomeScene from "../components/HomeScene";
+import Signpost from "../components/Signpost";
 import "./Home.css";
 
 const navSigns = [
@@ -38,10 +39,7 @@ export default function Home() {
 
       <nav className="sign-nav" aria-label="Main">
         {navSigns.map((sign) => (
-          <Link key={sign.to} to={sign.to} className="sign">
-            <span className="sign-board">{sign.label}</span>
-            <span className="sign-post" aria-hidden="true" />
-          </Link>
+          <Signpost key={sign.to} to={sign.to} label={sign.label} />
         ))}
       </nav>
 

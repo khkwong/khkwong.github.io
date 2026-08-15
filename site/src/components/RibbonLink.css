@@ -1,0 +1,56 @@
+/* Three-sprite ribbon: fixed end caps carrying the tails, repeating middle.
+   Same construction as the dialog banner, at its own scale — this one sits
+   inside content rather than heading a page, so it runs smaller.
+
+   --s-ribbon must stay a WHOLE number for the same reason as every other
+   sprite scale on this site. See NOTES.md. */
+.ribbon-link {
+  --s-ribbon: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  height: calc(32px * var(--s-ribbon));
+  /* Asymmetric vertical padding centres the text on the ribbon body: the
+     bottom third of the sprite is tail, not banner. */
+  padding: calc(3px * var(--s-ribbon)) calc(12px * var(--s-ribbon))
+    calc(11px * var(--s-ribbon));
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.6rem;
+  color: #fff1d2;
+  text-decoration: none;
+  white-space: nowrap;
+  image-rendering: pixelated;
+  background:
+    url("/img/pixel/ui/banner-left.png") left top / calc(32px * var(--s-ribbon))
+      calc(32px * var(--s-ribbon)) no-repeat,
+    url("/img/pixel/ui/banner-right.png") right top / calc(32px * var(--s-ribbon))
+      calc(32px * var(--s-ribbon)) no-repeat,
+    url("/img/pixel/ui/banner-mid.png") left top / calc(32px * var(--s-ribbon))
+      calc(32px * var(--s-ribbon)) repeat-x;
+  transition: transform 0.12s ease;
+}
+
+.ribbon-link:hover,
+.ribbon-link:focus-visible {
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.ribbon-link:focus-visible {
+  filter: brightness(1.12);
+}
+
+/* Rendered from a fallback font, so it sits on a different baseline and runs
+   large next to the pixel type. Sized and nudged to match by eye. */
+.ribbon-link-arrow {
+  font-size: 0.8em;
+  line-height: 1;
+  transform: translateY(-0.05em);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ribbon-link {
+    transition: none;
+  }
+}

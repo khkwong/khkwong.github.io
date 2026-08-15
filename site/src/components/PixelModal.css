@@ -158,32 +158,6 @@
   padding-top: calc(6px * var(--s-ui));
 }
 
-/* Same 9-slice treatment, brown panel sprite. */
-.pixel-btn {
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.75rem;
-  color: #fff1d2;
-  padding: 0.85rem 1.6rem;
-  border-style: solid;
-  border-width: calc(6px * var(--s-ui));
-  border-image-source: url("/img/pixel/ui/panel-brown.png");
-  border-image-slice: 6 fill;
-  border-image-repeat: stretch;
-  image-rendering: pixelated;
-  cursor: pointer;
-  transition: transform 0.1s ease;
-}
-
-.pixel-btn:hover,
-.pixel-btn:focus-visible {
-  transform: translateY(-2px);
-  outline: none;
-}
-
-.pixel-btn:focus-visible {
-  filter: brightness(1.15);
-}
-
 @keyframes pixel-modal-scrim-in {
   from {
     opacity: 0;
@@ -204,8 +178,7 @@
     animation: none;
   }
 
-  .pixel-modal-close,
-  .pixel-btn {
+  .pixel-modal-close {
     transition: none;
   }
 }

@@ -175,11 +175,74 @@ no more tiles are needed.
 
 ---
 
-## Known rough edge
+## Inner pages
 
-`useTheme` (`src/hooks/useTheme.ts`) is a plain hook, not shared state, so every
-caller holds its own copy. It's safe today only because its two consumers never
-mount together — the NavBar's `ThemeToggle` is hidden on the home page, and the
-sun/moon button only exists there. Put the nav back on the home page and they'll
-desync, with one control showing the wrong state. Fix with context or an
-external store if that day comes.
+`PageChrome` (`src/components/PageChrome.tsx`) is the shared frame: the same sky
+the title screen uses, a ribbon link back to it, and the sun/moon control. Only
+Projects uses it so far — Resume and Games still have the old nav bar, which
+`App.tsx` decides via `hasPixelChrome`. Remove that condition once they're
+converted.
+
+- **`.page-chrome` must keep `isolation: isolate`.** The sky sits at `z-index:
+  -3`; without a stacking context that escapes to the root, where negative
+  z-index descendants paint *before* in-flow block backgrounds — so `body`'s
+  gradient in `index.css` covers the sky and the page looks like the backdrop
+  never loaded. `.title-screen` isolates for the same reason.
+- **The sky, clouds and grass are shared components** (`SkyBackdrop`,
+  `GrassFloor`), used by both the title screen and `PageChrome`, so the whole
+  site sits in one continuous world.
+- **`PageChrome` takes a `ground` prop**, on by default, that renders the grass
+  strip *and* the signpost back to the title screen. Turning it off removes the
+  page's only way home — add a back link elsewhere first if you do.
+- **Sign art lives in `components/Signpost.css`**, shared by the title screen's
+  nav row and the inner-page back link. Only placement belongs to the caller.
+  The responsive overrides in `Home.css` are scoped under `.sign-nav` so they
+  don't reach the standalone sign.
+- **Inner-page layering: `sky (-3) < signpost (-2) < grass (-1) < content`.**
+  Both the ground and the sign must stay below the content — a fixed floor at a
+  positive z-index buries whatever content lines up with it, which is not
+  obvious until a page grows long enough to reach the bottom of the viewport.
+  Sign below grass is what keeps the post tucked into the turf. Because content
+  paints over the floor, `.has-ground` needs only a little bottom padding for
+  breathing room — reserving the floor's full height there makes every short
+  page taller than the viewport and gives it a scrollbar with nothing to
+  scroll to.
+- **The sun/moon is pinned to the corner on inner pages, not swung on the arc.**
+  The title screen's celestial wheel has a 54vh radius, which would sweep
+  straight through the content. Same sprite in the same corner, so it reads as
+  the same object; it just cross-fades in place.
+- **`.pixel-btn` lives in `index.css`**, not in a component stylesheet, because
+  the dialog, detail pages and archive all use it.
+
+**Panel text colours are hard-coded, not themed.** The panel art is a fixed tan
+in both light and dark, so `var(--text)` would go pale on it at night and
+vanish. Anything sitting on a panel sets its colour explicitly.
+
+- **`signpost={false}` turns off the planted Home sign** for pages one level
+  down, which carry their own back link instead (`RibbonLink`, inside the
+  content panel). Only one back control shows at a time, so a detail page
+  doesn't offer two different retreats.
+- **The Home sign becomes a header ribbon below 1440px.** The sign's right edge
+  reaches ~145px while the content column starts at `(100vw - 1100px) / 2`;
+  they collide below roughly that width, and because the sign sits at a
+  negative z-index it doesn't merely overlap — the content paints over it and
+  it vanishes. Both controls are rendered and CSS shows one, so there's no
+  resize listener and no flash on load. The signpost defaults to `display:
+  none` and the wide query enables it, so a query that never matches leaves the
+  ribbon showing rather than nothing.
+- **`RibbonLink` has its own `--s-ribbon` scale**, separate from `--s-ui`,
+  because it sits inside content rather than heading a page. Whole numbers
+  only, same as every other sprite scale here.
+
+Projects is a showcase, not a chronology — `tier` in `data/projects.ts` splits
+cards-with-detail-pages from one-line archive entries. A one-sentence project
+given a full card makes the real work harder to find.
+
+**Both tiers are fixed-size shelves** (`FEATURED_LIMIT`, `ARCHIVE_LIMIT`, six
+each). A new project displaces an existing one rather than joining it —
+otherwise the page flattens back into "ten things that all look equally
+important", which is the problem tiering solves. The limits log a dev-only
+warning rather than slicing the array: silently dropping a project you just
+added would be a nasty bug to chase. When the archive genuinely outgrows its
+shelf, that's the signal to build the full "everything ever" list as its own
+view rather than stretching this page.
