@@ -1,5 +1,13 @@
-grass-top.png, dirt.png, coin.png, digits/0.png-9.png, cloud_tiny/small/medium/large/xlarge.png (composed from tiles 153-155)
+grass-top.png, dirt.png, coin.png, digits/0.png-9.png,
+wall-left/mid/right.png (tiles 48-50),
+guy.png (Characters tiles 9-10, combined into a 2-frame sprite sheet),
+cloud_tiny/small/medium/large/xlarge.png (composed from tiles 153-155)
 
 Sourced from Kenney's "Pixel Platformer" asset pack (https://kenney.nl/assets/pixel-platformer)
 License: Creative Commons Zero (CC0) — public domain, no attribution required.
 Credit given anyway: Kenney (www.kenney.nl)
+
+---
+
+portrait.png — downsampled from img/headshot.png (own photo), not from the pack.
+sun.png, moon.webp — sourced separately.

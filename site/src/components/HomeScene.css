@@ -1,21 +1,107 @@
+/* Day/night pivot values. The wheel's centre sits low so the arc reads wide;
+   the risen body always lands at (--sky-pivot-y - --sky-radius). */
+:root {
+  --sky-pivot-x: 78%;
+  --sky-pivot-y: 64vh;
+  /* Risen position is (pivot-y - radius) = 10vh, deliberately above the title
+     block's 13vh top. Keeping it clear vertically means the hint label can't
+     collide with the heading no matter how narrow the viewport gets. */
+  --sky-radius: 54vh;
+  --sky-body-size: 76px;
+  --sky-transition: 1.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Dropped to -3 so the celestial wheel can sit at -2: behind the wall, signs
+   and ground, but still in front of the sky itself. */
 .home-sky {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -3;
   overflow: hidden;
-  background: linear-gradient(to bottom, #3fa9f5 0%, #7ec8f7 55%, #bfe4fb 100%);
+  background: #0b1026;
 }
 
-:root[data-theme="dark"] .home-sky {
-  background: linear-gradient(to bottom, #0b1026 0%, #131a3a 55%, #1c2550 100%);
-}
-
-.home-celestial {
+/* Gradients can't be transitioned, so day and night are stacked and cross-faded. */
+.sky-layer {
   position: absolute;
-  top: 8%;
-  right: 10%;
-  width: 72px;
-  height: 72px;
+  inset: 0;
+  transition: opacity var(--sky-transition);
+}
+
+.sky-day {
+  background: linear-gradient(to bottom, #3fa9f5 0%, #7ec8f7 55%, #bfe4fb 100%);
+  opacity: 1;
+}
+
+.sky-night {
+  background: linear-gradient(to bottom, #0b1026 0%, #131a3a 55%, #1c2550 100%);
+  opacity: 0;
+}
+
+:root[data-theme="dark"] .sky-day {
+  opacity: 0;
+}
+
+:root[data-theme="dark"] .sky-night {
+  opacity: 1;
+}
+
+/* Sits behind the wall, signs and ground so the setting body disappears behind
+   the scenery instead of sweeping across it. Still clickable at this depth:
+   the sky below it is lower still, the grass sets pointer-events: none, and at
+   10vh the risen body is well above the wall's top edge. */
+.celestial-wheel {
+  position: fixed;
+  left: var(--sky-pivot-x);
+  top: var(--sky-pivot-y);
+  width: 0;
+  height: 0;
+  z-index: -2;
+  transition: transform var(--sky-transition);
+}
+
+:root[data-theme="dark"] .celestial-wheel {
+  transform: rotate(180deg);
+}
+
+/* Each slot is exactly sprite-sized and centred on its point of the arc, so
+   the counter-rotation below pivots about the sprite itself. The hint is taken
+   out of flow for the same reason — it must not shift the slot's centre. */
+.celestial-slot {
+  position: absolute;
+  left: calc(var(--sky-body-size) / -2);
+  width: var(--sky-body-size);
+  height: var(--sky-body-size);
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: transform var(--sky-transition);
+}
+
+.slot-sun {
+  top: calc(var(--sky-radius) * -1 - var(--sky-body-size) / 2);
+}
+
+.slot-moon {
+  top: calc(var(--sky-radius) - var(--sky-body-size) / 2);
+}
+
+/* Cancels the wheel's spin so sprite and label ride the arc upright. */
+:root[data-theme="dark"] .celestial-slot {
+  transform: rotate(-180deg);
+}
+
+/* Whichever body is below the horizon shouldn't be clickable. */
+:root[data-theme="dark"] .slot-sun,
+:root:not([data-theme="dark"]) .slot-moon {
+  pointer-events: none;
+}
+
+.celestial-body {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .home-cloud {
@@ -46,19 +132,10 @@
 }
 
 .home-moon {
-  display: none;
   object-fit: contain;
   image-rendering: pixelated;
   filter: drop-shadow(0 0 8px rgba(231, 231, 240, 0.4));
   animation: moon-glow 4s ease-in-out infinite;
-}
-
-:root[data-theme="dark"] .home-sun {
-  display: none;
-}
-
-:root[data-theme="dark"] .home-moon {
-  display: block;
 }
 
 @keyframes sun-pulse {
@@ -81,6 +158,53 @@
   }
 }
 
+.celestial-hint {
+  position: absolute;
+  right: calc(100% + 0.2rem);
+  top: 50%;
+  padding: 0.35rem 0.45rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(0.45rem, 1vw, 0.68rem);
+  line-height: 1.6;
+  color: #fff;
+  white-space: nowrap;
+  /* Backing plate keeps the label readable when a cloud drifts behind it. */
+  background: rgba(20, 30, 55, 0.55);
+  text-shadow:
+    -2px 0 0 #1b2a4a,
+    2px 0 0 #1b2a4a,
+    0 -2px 0 #1b2a4a,
+    0 2px 0 #1b2a4a;
+  animation: hint-bob 1.1s ease-in-out infinite alternate;
+}
+
+.celestial-slot:focus-visible .celestial-hint {
+  color: #ffe9a8;
+}
+
+@keyframes hint-bob {
+  from {
+    transform: translate(-8px, -50%);
+  }
+  to {
+    transform: translate(2px, -50%);
+  }
+}
+
+/* Big sweeping rotation is exactly the kind of motion to drop here. */
+@media (prefers-reduced-motion: reduce) {
+  .sky-layer,
+  .celestial-wheel,
+  .celestial-slot {
+    transition-duration: 0.01s;
+  }
+
+  .celestial-hint {
+    animation: none;
+    transform: translate(0, -50%);
+  }
+}
+
 .grass-floor {
   position: fixed;
   left: 0;
@@ -98,7 +222,9 @@
   inset: 0;
   background-image: url("/img/pixel/dirt.png");
   background-repeat: repeat;
-  background-size: 48px 48px;
+  /* 18px source. Was 48px — a 2.67x scale that rendered the tile's pixels at
+     uneven widths. Now locked to a whole multiple. */
+  background-size: calc(18px * var(--s-terrain)) calc(18px * var(--s-terrain));
   image-rendering: pixelated;
 }
 
@@ -107,21 +233,30 @@
   left: 0;
   right: 0;
   top: 0;
-  height: 42px;
+  /* 14px source (border trimmed), already a whole 3x — now derived. */
+  height: calc(14px * var(--s-terrain));
   background-image: url("/img/pixel/grass-top.png");
   background-repeat: repeat-x;
-  background-size: 42px 42px;
+  background-size: calc(14px * var(--s-terrain)) calc(14px * var(--s-terrain));
   image-rendering: pixelated;
 }
 
 .grass-copyright {
   position: absolute;
-  bottom: 0.4rem;
+  bottom: 0.5rem;
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  /* Hard outline rather than a soft shadow — it has to hold up over the
+     speckled dirt texture, which a blurred shadow washes out against. */
+  text-shadow:
+    -1px 0 0 #4a2a15,
+    1px 0 0 #4a2a15,
+    0 -1px 0 #4a2a15,
+    0 1px 0 #4a2a15,
+    0 2px 3px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
 }

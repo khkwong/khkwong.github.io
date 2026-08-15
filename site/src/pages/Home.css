@@ -1,37 +1,304 @@
-.home-page {
+.title-screen {
   position: relative;
+  min-height: 100svh;
   isolation: isolate;
-  padding-bottom: 24vh;
+  --wall-width: min(88vw, 720px);
+  /* 18px source tile at the shared terrain scale. */
+  --wall-tile: calc(18px * var(--s-terrain));
+  /* Character frame is 24px square; the sheet is two frames wide. */
+  --guy-size: calc(24px * var(--s-char));
+  --guy-sheet: calc(48px * var(--s-char));
+  /* Open grass between the viewport edge and the wall. */
+  --guy-gutter: calc((100vw - var(--wall-width)) / 2);
+  /* He walks his natural stride, but never further than the gutter actually
+     allows — otherwise he'd cross in front of the wall and cover the signs.
+     max(0px, ...) guards the case where the gutter is narrower than he is. */
+  --guy-pace: max(
+    0px,
+    min(calc(50px * var(--s-char)), calc(var(--guy-gutter) - var(--guy-size) - 4vw))
+  );
 }
 
-.hero {
-  padding: 2rem 1.5rem;
-  margin: 3rem -1.5rem 2.5rem;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--bg) 55%, transparent);
-  backdrop-filter: blur(6px);
+/*
+ * Layer order inside .title-screen (which isolates its own stacking context):
+ *   sky (-3) < sun/moon (-2) < wall (-1) < signs (-1, later in DOM)
+ *     < grass = title = portrait = guy (0) < coins (1) < coin HUD (5)
+ * Two deliberate choices here:
+ *  - Signs sit behind the grass so their posts tuck into the ground and slide
+ *    up out of it on hover, rather than floating in front of the dirt.
+ *  - The sun/moon sit behind the scenery so the setting body disappears behind
+ *    the wall and ground instead of sweeping across them.
+ */
+.title-block {
+  position: fixed;
+  top: 13vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  width: min(94vw, 900px);
+  text-align: center;
+  pointer-events: none;
 }
 
-.hero h1 {
-  font-size: 2.25rem;
-  margin: 0 0 0.75rem;
+.title-kicker,
+.title-name,
+.title-tagline {
+  font-family: "Press Start 2P", monospace;
+  color: #fff;
+  margin: 0;
+  text-shadow:
+    -2px 0 0 #1b2a4a,
+    2px 0 0 #1b2a4a,
+    0 -2px 0 #1b2a4a,
+    0 2px 0 #1b2a4a,
+    4px 5px 0 rgba(0, 0, 0, 0.28);
 }
 
-.hero p {
-  color: var(--muted);
-  max-width: 42ch;
-  font-size: 1.05rem;
+.title-kicker {
+  font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+  color: #ffe9a8;
 }
 
-.hero-actions {
+.title-name {
+  font-size: clamp(1.35rem, 5vw, 3.2rem);
+  line-height: 1.3;
+  margin: 0.9rem 0 0;
+}
+
+.title-tagline {
+  font-size: clamp(0.5rem, 1.35vw, 0.8rem);
+  line-height: 1.9;
+  margin: 1.4rem 0 0;
+  color: #eaf6ff;
+}
+
+/* Plank backdrop the portrait hangs on and the signs stand against. Sits at
+   -1 alongside the signs (DOM order puts it behind them) and below the grass
+   at 0, so its base tucks into the ground instead of sitting on top of it. */
+.title-wall {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 19vh;
+  z-index: -1;
+  width: var(--wall-width);
+  /* Tall enough to clear the portrait at 47vh with margin above it. */
+  height: 47vh;
+  image-rendering: pixelated;
+  /* Rows of planks with beveled end caps: the left and right columns repeat
+     down the height, the middle fills between them. Anchored to `top` so the
+     topmost row is always whole and any partial row falls at the bottom,
+     where the grass covers it. */
+  background:
+    url("/img/pixel/wall-left.png") left top / var(--wall-tile) var(--wall-tile) repeat-y,
+    url("/img/pixel/wall-right.png") right top / var(--wall-tile) var(--wall-tile) repeat-y,
+    url("/img/pixel/wall-mid.png") left top / var(--wall-tile) var(--wall-tile) repeat;
+}
+
+/* Two-frame sprite sheet (48x24 native). steps(2) snaps hard between the
+   legs-together and legs-apart frames instead of interpolating, which is what
+   makes it read as 8-bit animation rather than a CSS tween. */
+.title-guy {
+  position: fixed;
+  bottom: calc(22vh - 4px);
+  /* Positioned so that finishing his rightward walk leaves him just shy of
+     the wall, whatever the viewport width. */
+  left: calc(
+    50% - var(--wall-width) / 2 - var(--guy-size) - var(--guy-pace) - 2vw
+  );
+  z-index: 0;
+  width: var(--guy-size);
+  height: var(--guy-size);
+  background-image: url("/img/pixel/guy.png");
+  background-size: var(--guy-sheet) var(--guy-size);
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  /* Two independent animations: the frame cycling and the actual walking.
+     Keeping them separate is what lets the sprite flip direction without
+     disturbing the frame timing. `linear` so his pace stays constant. */
+  animation:
+    guy-shuffle 0.7s steps(2) infinite,
+    guy-pace 7s linear infinite;
+}
+
+@keyframes guy-shuffle {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: calc(-1 * var(--guy-sheet)) 0;
+  }
+}
+
+/* scaleX(-1) faces him right. translateX is listed first so it resolves in
+   screen space — the other order would mirror the movement along with him.
+   The 4% holds at each end are the turn, brief enough that the feet cycling
+   through them doesn't read as walking on the spot. */
+@keyframes guy-pace {
+  0% {
+    transform: translateX(0) scaleX(-1);
+  }
+  46% {
+    transform: translateX(var(--guy-pace)) scaleX(-1);
+  }
+  50% {
+    transform: translateX(var(--guy-pace)) scaleX(1);
+  }
+  96% {
+    transform: translateX(0) scaleX(1);
+  }
+  100% {
+    transform: translateX(0) scaleX(-1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-guy {
+    animation: none;
+    background-position: 0 0;
+    transform: scaleX(-1);
+  }
+}
+
+/* Fills the mid-sky band between the title and the signs, on the same vertical
+   axis as both. Sits at z-index 0 like the title so coins pass in front. */
+.title-portrait {
+  position: fixed;
+  left: 50%;
+  top: 47vh;
+  z-index: 0;
+  padding: 6px;
+  background: #a9713c;
+  border: 4px solid #5d3a1a;
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.25),
+    inset 4px 4px 0 rgba(255, 255, 255, 0.18),
+    0 8px 0 rgba(0, 0, 0, 0.18);
+  animation: portrait-sway 4.5s ease-in-out infinite;
+}
+
+/* 64px source. Was clamp(104px, 13vw, 176px) — fluid, so it almost never
+   landed on a whole multiple of the source. Stepped instead. */
+.title-portrait img {
+  display: block;
+  width: calc(64px * var(--s-portrait));
+  height: calc(64px * var(--s-portrait));
+  image-rendering: pixelated;
+}
+
+/* Keyframes carry the centring translate — a bare rotate would drop it. */
+@keyframes portrait-sway {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(-2.2deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(2.2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-portrait {
+    animation: none;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Signs are planted along the grass line — the offset sinks the posts into it.
+   Keep in sync with .grass-floor height (22vh) in HomeScene.css. */
+.sign-nav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(22vh - 14px);
+  z-index: -1;
+  width: min(96vw, 1000px);
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(0.6rem, 2.5vw, 2rem);
 }
 
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
-  margin-top: 1.25rem;
+.sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.12s ease;
+}
+
+.sign:hover,
+.sign:focus-visible {
+  transform: translateY(-5px);
+}
+
+.sign:focus-visible {
+  outline: none;
+}
+
+.sign-board {
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(0.55rem, 1.5vw, 0.85rem);
+  color: #ffeec2;
+  background: #a9713c;
+  border: 4px solid #5d3a1a;
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.25),
+    inset 4px 4px 0 rgba(255, 255, 255, 0.18);
+  padding: 0.85rem 1.1rem;
+  white-space: nowrap;
+}
+
+.sign:hover .sign-board {
+  background: #bd8047;
+}
+
+.sign:focus-visible .sign-board {
+  border-color: #fff3c4;
+}
+
+.sign-post {
+  width: 14px;
+  height: clamp(26px, 5vh, 50px);
+  background: #7a4f24;
+  border-left: 4px solid #5d3a1a;
+  border-right: 4px solid #5d3a1a;
+}
+
+/* Below roughly this width the gutter beside the wall is narrower than the
+   sprite itself, so his pace collapses toward zero and he'd march on the spot
+   again. He's decoration — drop him rather than show the broken version. */
+@media (max-width: 1100px) {
+  .title-guy {
+    display: none;
+  }
+}
+
+/* Narrow screens: wrap into a 2x2 grid and shorten the posts so the upper
+   row's posts don't collide with the lower row's boards. */
+@media (max-width: 640px) {
+  .sign-nav {
+    flex-wrap: wrap;
+    max-width: 21rem;
+    gap: 0.6rem;
+  }
+
+  .sign-post {
+    height: 18px;
+  }
+}
+
+/* Short viewports: compress the signs so they clear the coin HUD below. */
+@media (max-height: 700px) {
+  .title-block {
+    top: 9vh;
+  }
+
+  .sign-board {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .sign-post {
+    height: 18px;
+  }
 }

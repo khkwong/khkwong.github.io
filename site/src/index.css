@@ -8,6 +8,17 @@
 
   --sans: system-ui, "Segoe UI", Roboto, sans-serif;
 
+  /*
+   * Pixel-art scale factors. These MUST stay whole numbers: a sprite drawn at
+   * a fractional multiple renders some source pixels wider than others, which
+   * looks mushy no matter what `image-rendering` says. So instead of scaling
+   * art fluidly, we step it down in whole increments at breakpoints.
+   * Each is a multiplier on that asset's native source size.
+   */
+  --s-terrain: 3; /* 18px wall/dirt tiles, 14px grass tile */
+  --s-char: 4; /* 24px walking-character frames */
+  --s-portrait: 3; /* 64px portrait */
+
   font: 16px/1.55 var(--sans);
   color-scheme: light;
   color: var(--text);
@@ -34,6 +45,22 @@
   --surface: #f8f8fa;
   --border: #e4e4e8;
   --accent: #7c3aed;
+}
+
+/* Step the sprite scales down in whole increments as the viewport narrows. */
+@media (max-width: 900px) {
+  :root {
+    --s-char: 3;
+    --s-portrait: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --s-terrain: 2;
+    --s-char: 2;
+    --s-portrait: 2;
+  }
 }
 
 * {

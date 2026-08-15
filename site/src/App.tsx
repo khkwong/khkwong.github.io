@@ -14,7 +14,8 @@ export default function App() {
 
   return (
     <>
-      <NavBar />
+      {/* Home is a title screen — its signpost nav replaces the top bar. */}
+      {!isHome && <NavBar />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
