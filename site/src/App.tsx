@@ -29,6 +29,19 @@ export default function App() {
             and bookmarks land somewhere rather than 404. */}
         <Route path="/resume" element={<Navigate to="/work" replace />} />
         <Route path="/games" element={<Navigate to="/" replace />} />
+        {/* Anything unmatched. Without this, <Routes> renders nothing and a
+            typo'd URL is a blank white page — the deploy already copies
+            index.html to 404.html, so Pages hands every bad path to the router
+            rather than 404ing itself, which makes this the only thing standing
+            between a bad URL and an empty screen.
+
+            `replace` so Back returns to wherever they actually came from
+            instead of the bad URL, which would just redirect again and trap
+            them. Bad slugs under /projects and /work don't come here — those
+            routes match and render a Not Found panel that keeps the section's
+            back-link, which is more use than being dropped at the title
+            screen. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </main>
   );
