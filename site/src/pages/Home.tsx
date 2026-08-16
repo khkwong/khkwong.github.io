@@ -9,7 +9,6 @@ const navSigns = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/work", label: "Work" },
-  { to: "/games", label: "Games" },
 ];
 
 export default function Home() {

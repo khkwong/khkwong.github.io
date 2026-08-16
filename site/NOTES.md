@@ -376,3 +376,50 @@ fifth sign that fires a file save breaks the metaphor the whole screen runs on.
 The download lives where someone already looking for it will be standing: the
 top of `/work`, the foot of each work detail page, and the About dialog's
 contact line.
+
+## There is no games page either
+
+The old site had one, and it was the right idea badly executed. It existed to
+show personality in an otherwise professional portfolio, but what it actually
+contained was an inventory: thirty games, one line each, mostly "this is good."
+That *declares* a personality rather than demonstrating one. The pixel rebuild,
+the coin minigame on the title screen and the mods on the projects page all
+demonstrate it, so the list was arguing a case that had already been won.
+
+It also had a maintenance shape nothing else here has. Projects and work go
+stale slowly — a shipped thing stays shipped. A page whose entire value is being
+current ("currently my most played", "latest gacha obsession", a Riot tag) goes
+stale in months, and had. A page like that costs you the moment it stops being
+true, and there is no signal that it has.
+
+**If it comes back, it comes back as writing, not as a list.** Analysis of why a
+game's systems work is the same muscle as the work detail pages, pointed at
+something worth pointing it at, and it would slot straight into the existing
+shape: a `data/writing.ts`, a `CardRail`, a detail route. The reason it isn't
+built yet is that an empty blog is worse than no blog, and two posts that stop
+dead are worse still. Write the posts first, somewhere with no deploy attached;
+build the tab around them only once there are enough to be worth a tab.
+
+Resisted on the way out: a small "now playing" strip as a compromise. Same
+staleness trap in a smaller box, and it buys a permanent update obligation for
+almost nothing.
+
+### What went with it
+
+Games was the last route on the pre-pixel chrome, so its removal took the whole
+thing:
+
+- `NavBar` and `Footer`, and with them the `hasPixelChrome` branch in `App.tsx`.
+  Every route now carries its own chrome — signposts on the title screen,
+  `PageChrome` everywhere else — so `App` is just a route table again.
+- `ThemeToggle`. It was only ever mounted inside `NavBar`, which meant that
+  after the home revamp the *only* place to reach it was the games page. The
+  theme itself is very much alive: the title screen's sun/moon wheel and
+  `PageChrome`'s corner celestial both call `useTheme`, and they were already
+  doing all the real work.
+- `.page`, `.button`, `.button-secondary`, and the `--muted` / `--border` /
+  `--surface` / `--card` palette variables — all unreferenced once the last
+  document-styled page was gone.
+- `sf_gamer.png` and `ahhh.png`.
+
+`/games` redirects to `/` rather than 404ing, the same courtesy `/resume` gets.

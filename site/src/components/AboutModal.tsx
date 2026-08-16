@@ -42,8 +42,9 @@ export default function AboutModal({ onClose }: { onClose: () => void }) {
       <h3>Off the Clock</h3>
       <p>
         Badminton, piano, boxing, karaoke, and a second-degree black belt in Tae Kwon Do. I
-        also build game mods for problems that annoy me personally, and play too much for my own good,
-        check out my personal view on games I've played here: <Link to="/games">games page</Link>.
+        play more games than I should, and build mods for the parts of them that annoy me
+        personally — which is where the mods on the{" "}
+        <Link to="/projects">projects page</Link> came from.
       </p>
     </PixelModal>
   );

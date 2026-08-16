@@ -1,9 +1,10 @@
+/* Only three colours survive from the pre-pixel design, because that's all the
+   document chrome still needs: page text, page background, and the accent the
+   body's wash and inline links are mixed from. Everything visible on top of
+   that is sprite art with its own baked-in palette. */
 :root {
   --text: #1f2023;
-  --muted: #6b6d76;
   --bg: #ffffff;
-  --surface: #f8f8fa;
-  --border: #e4e4e8;
   --accent: #7c3aed;
 
   --sans: system-ui, "Segoe UI", Roboto, sans-serif;
@@ -32,19 +33,15 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --text: #e7e7ea;
-  --muted: #9a9ba5;
   --bg: #121215;
-  --surface: #1a1a1f;
-  --border: #2b2c33;
   --accent: #a78bfa;
 }
 
+/* Restates the :root values rather than inheriting them, so an explicit "light"
+   choice beats the dark block above regardless of source order. */
 :root[data-theme="light"] {
   --text: #1f2023;
-  --muted: #6b6d76;
   --bg: #ffffff;
-  --surface: #f8f8fa;
-  --border: #e4e4e8;
   --accent: #7c3aed;
 }
 
@@ -101,29 +98,6 @@ h3 {
 
 h2 {
   margin-top: 2rem;
-}
-
-.page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
-}
-
-.button {
-  display: inline-block;
-  padding: 0.6rem 1.1rem;
-  border-radius: 8px;
-  background: var(--accent);
-  color: white;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.button-secondary {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
 }
 
 /* Site-wide pixel button: a 9-slice brown panel from the UI pack. Lives here
