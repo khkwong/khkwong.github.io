@@ -161,3 +161,21 @@ h2 {
     transition: none;
   }
 }
+
+/* Section label that sits on the sky rather than inside a panel, outlined the
+   same way page titles are so it reads as part of the scene. Here rather than
+   in one stylesheet because both the Work page and CardRail use it, and they
+   have to match exactly — the columns align by their headings. */
+.scene-title {
+  margin: 0 0 0.9rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #fff;
+  text-shadow:
+    -2px 0 0 #1b2a4a,
+    2px 0 0 #1b2a4a,
+    0 -2px 0 #1b2a4a,
+    0 2px 0 #1b2a4a,
+    3px 4px 0 rgba(0, 0, 0, 0.25);
+}

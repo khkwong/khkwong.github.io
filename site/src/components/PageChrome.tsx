@@ -18,6 +18,8 @@ export default function PageChrome({
   title,
   ground = true,
   signpost = true,
+  actions,
+  className,
   children,
 }: {
   title: string;
@@ -27,13 +29,24 @@ export default function PageChrome({
    * carry their own back link, so only one back control shows at a time.
    */
   signpost?: boolean;
+  /** Page-level control rendered at the end of the banner row, beside the title. */
+  actions?: ReactNode;
+  /**
+   * Extra class on the root, so a page can override `--page-width` — the shared
+   * max-width the banner and content columns both line up against.
+   */
+  className?: string;
   children: ReactNode;
 }) {
   const { theme, toggleTheme } = useTheme();
   const isDay = theme === "light";
 
+  const rootClass = ["page-chrome", ground && "has-ground", className]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className={ground ? "page-chrome has-ground" : "page-chrome"}>
+    <div className={rootClass}>
       <SkyBackdrop />
 
       {/* Same sprite and corner as the title screen's risen body, so it reads
@@ -64,6 +77,7 @@ export default function PageChrome({
           </div>
         )}
         <h1 className="page-banner-title">{title}</h1>
+        {actions && <div className="page-banner-actions">{actions}</div>}
       </header>
 
       {children}

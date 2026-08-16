@@ -1,0 +1,118 @@
+.card-rail {
+  --rail-gap: clamp(1rem, 2vw, 1.75rem);
+  --rail-visible: 3;
+}
+
+.card-rail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.card-rail-controls {
+  display: flex;
+  gap: 0.5rem;
+  /* The heading carries bottom margin; match it so the arrows sit on the
+     heading's line rather than below it. */
+  margin-bottom: 0.9rem;
+}
+
+/* Same 9-slice brown panel as .pixel-btn, sized square for a glyph. */
+.card-rail-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.2rem;
+  padding: 0;
+  color: #fff1d2;
+  border-style: solid;
+  border-width: calc(6px * var(--s-ui));
+  border-image-source: url("/img/pixel/ui/panel-brown.png");
+  border-image-slice: 6 fill;
+  border-image-repeat: stretch;
+  image-rendering: pixelated;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.card-rail-arrow:hover:not(:disabled),
+.card-rail-arrow:focus-visible:not(:disabled) {
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.card-rail-arrow:focus-visible {
+  filter: brightness(1.15);
+}
+
+/* Dimmed rather than removed: the control keeping its place stops the header
+   reflowing every time you reach an end. */
+.card-rail-arrow:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.card-rail-caret {
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid currentColor;
+}
+
+.card-rail-caret.back {
+  border-left: none;
+  border-right: 8px solid currentColor;
+}
+
+.card-rail-track {
+  display: flex;
+  gap: var(--rail-gap);
+  overflow-x: auto;
+  /* overflow-y can't stay visible next to overflow-x: auto — it computes to
+     auto too. The padding gives the cards' 5px hover lift and focus ring
+     somewhere to go, so neither gets clipped or spawns a vertical scrollbar. */
+  padding: 6px 0;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* Arrows and the snap are the affordance; a bar under the cards would sit
+     awkwardly against the ground sprite. */
+  scrollbar-width: none;
+}
+
+.card-rail-track::-webkit-scrollbar {
+  display: none;
+}
+
+.card-rail-track > * {
+  /* Exactly N across, gaps included, so a card never straddles the edge. */
+  flex: 0 0
+    calc(
+      (100% - (var(--rail-visible) - 1) * var(--rail-gap)) / var(--rail-visible)
+    );
+  scroll-snap-align: start;
+}
+
+@media (max-width: 900px) {
+  .card-rail {
+    --rail-visible: 2;
+  }
+}
+
+@media (max-width: 620px) {
+  .card-rail {
+    --rail-visible: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-rail-arrow {
+    transition: none;
+  }
+
+  .card-rail-track {
+    scroll-behavior: auto;
+  }
+}

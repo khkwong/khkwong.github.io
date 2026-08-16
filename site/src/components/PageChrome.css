@@ -7,6 +7,11 @@
  * relative to this element, above the page background and below the content.
  */
 .page-chrome {
+  /* The column every part of a page lines up against — the banner below, and
+     the content wrapper in the page's own stylesheet. A page with a sidebar
+     widens it through PageChrome's `className` prop so the two stay in step;
+     override it in one place or the title stops aligning with the content. */
+  --page-width: 1100px;
   position: relative;
   isolation: isolate;
   min-height: 100svh;
@@ -25,9 +30,21 @@
   display: flex;
   align-items: center;
   gap: clamp(0.75rem, 3vw, 2rem);
-  max-width: 1100px;
+  max-width: var(--page-width);
   margin: 0 auto 2rem;
   flex-wrap: wrap;
+}
+
+/* Pushed to the far end of the banner row, so a page-level action sits on the
+   title's line rather than opening a gap above the content. */
+.page-banner-actions {
+  margin-left: auto;
+}
+
+.page-banner-actions .pixel-btn {
+  text-decoration: none;
+  font-size: 0.62rem;
+  padding: 0.7rem 1.1rem;
 }
 
 /* Same outlined treatment as the title screen's heading so page titles read as

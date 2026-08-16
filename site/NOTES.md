@@ -178,10 +178,9 @@ no more tiles are needed.
 ## Inner pages
 
 `PageChrome` (`src/components/PageChrome.tsx`) is the shared frame: the same sky
-the title screen uses, a ribbon link back to it, and the sun/moon control. Only
-Projects uses it so far — Resume and Games still have the old nav bar, which
-`App.tsx` decides via `hasPixelChrome`. Remove that condition once they're
-converted.
+the title screen uses, a ribbon link back to it, and the sun/moon control.
+Projects and Work use it — Games still has the old nav bar, which `App.tsx`
+decides via `hasPixelChrome`. Remove that condition once it's converted.
 
 - **`.page-chrome` must keep `isolation: isolate`.** The sky sits at `z-index:
   -3`; without a stacking context that escapes to the root, where negative
@@ -246,3 +245,134 @@ warning rather than slicing the array: silently dropping a project you just
 added would be a nasty bug to chase. When the archive genuinely outgrows its
 shelf, that's the signal to build the full "everything ever" list as its own
 view rather than stretching this page.
+
+---
+
+## There is no resume page
+
+There used to be. `/resume` now redirects to `/work`, and the résumé is a PDF
+download — offered on the Work page, on every work detail page, and in the
+About dialog.
+
+The reason is that the résumé is **tailored per application**. A transcribed
+copy on the site would be a stale, generic version of a document maintained
+somewhere else, and the drift is invisible until someone reads both. One file
+that gets replaced has no such failure mode.
+
+`/work` is the page that replaced it, and it's organised by **what was built,
+not by employer**. A card per company gives one employer an enormous entry and
+a two-month internship an equally sized one — the same flattening the projects
+page tiers away. So `data/work.ts` has two lists:
+
+- `employment` — the plain facts, rendered as the timeline strip at the top of
+  the page. Where, what title, how long, nothing else. Two stints at one
+  employer nest as two `roles` on one entry rather than becoming two rows,
+  which would read as two unrelated jobs.
+- `workItems` — one entry per system built, tagged with its company, tiered and
+  shelved exactly like projects (`WORK_FEATURED_LIMIT`, `WORK_ARCHIVE_LIMIT`).
+
+The timeline answers "what's the track record" for someone who wants to leave
+in three seconds; the cards are for whoever stays. A dev-only check also warns
+if a `workItem.company` doesn't match any `employment.company`, since the
+detail page looks up the employer link by that string.
+
+**There is no separate "also shipped" section.** Each timeline row carries a
+`<details>` disclosure listing everything built at that employer, via
+`workItemsFor()` — featured entries link to their detail page, archive entries
+are plain text. Those second-tier items belong *to* a job, so filing them under
+it makes the timeline the complete record and leaves the card grid a pure
+highlight reel. It also keeps the page from growing a third stacked section.
+
+Native `<details>` rather than a state-driven panel: keyboard operable, and
+nothing about it would be improved by JavaScript. The caret is a CSS triangle
+because the native marker can't be styled consistently and Press Start 2P has
+no glyph for one.
+
+Layout is two columns — timeline plus cards on the left, education and skills
+in a sidebar. The sidebar is supporting evidence, so it's the half that drops
+below at narrow widths.
+
+**Both columns align by their headings, not by their panels.** Every section on
+the page leads with a `.scene-title` (in `index.css`) of identical height, so
+the Education panel shares a top edge with the timeline panel opposite it. Move
+a heading back inside its panel — which is what the sidebar did at first — and
+that column starts higher than the other one.
+
+**The featured shelf is a `CardRail`, not a grid.** A grid grows a row every
+few entries and pushes the page taller; the rail shows three at a time and pans
+sideways, so the page stays about one screen regardless of how many cards
+exist. `--rail-visible` steps 3 → 2 → 1 with width.
+
+It's a real overflow container rather than a transform-driven track, which
+means touch swipe, trackpad and shift-scroll all work with no code, and tabbing
+to an off-screen card scrolls it into view because browsers do that for focused
+elements. The arrows sit on top of that as an affordance — they are not the
+only way through, which is why there's no keyboard handling in the component.
+
+Two non-obvious bits in `CardRail.css`: `overflow-y` **cannot** stay `visible`
+beside `overflow-x: auto` (it computes to `auto`), so the track carries 6px of
+vertical padding to give the cards' hover lift and focus ring somewhere to go
+instead of being clipped or spawning a second scrollbar. And the arrow-enabled
+check allows 1px of slack, or sub-pixel rounding leaves the right arrow live
+forever at the end of the track.
+
+**`--page-width` couples the banner to the content column.** `PageChrome` sets
+it to 1100px and `.page-chrome.work-page` widens it to 1400px to make room for
+the sidebar, through PageChrome's `className` prop. The banner reads the same
+variable, so the page title stays aligned with the content beneath it — set a
+width in only one of the two places and they drift apart.
+
+**`getWorkItemBySlug` deliberately matches featured items only.** Archive
+entries have no body, so resolving one would render an empty detail page to
+anyone who guessed the URL. A 404 is the more truthful answer.
+
+### Work cards have no images, on purpose
+
+Every entry is an internal tool, so there is no screenshot that can be
+published — `WorkCard` is text-forward where `ProjectCard` is built around art.
+
+That constraint is worth keeping even if art ever becomes available. Two
+shelves of identical-looking cards leave a visitor unsure why the site has both
+pages; a gallery and a dossier explain the difference without a word of copy.
+The underlying split is that everything on Projects has a public artifact to go
+look at, and nothing on Work does.
+
+### The confidentiality line
+
+`data/work.ts` opens with a comment listing what must stay out of these
+entries — internal system and database names, secrets handling, auth and
+deployment topology, record volumes, named data vendors, and anything blaming a
+named internal team. **Read it before adding an entry.** None of this work is
+publicly linkable, so that comment is the only thing standing between a private
+detail and a public page published under a real name.
+
+The consequence is that work detail pages are *less* technically specific than
+project detail pages, which is the opposite of what you'd expect. A mod can
+name the exact delegate it hooks; an internal platform can't. The depth has to
+come from the problem, the ownership and the decisions instead — which is why
+each entry is shaped as problem → what it does → what I owned → stack. Keeping
+"what it does" separate from "what I owned" is what lets a three-person-team
+project sit honestly next to a solo build.
+
+### Supporting facts live in `data/profile.ts`
+
+Contact, education and skills — the evidence, not the headline.
+
+- **No phone number.** It was in plaintext on the old resume page, which is a
+  scraper magnet for no benefit. It stays in the PDF, which is a deliberate
+  download by someone who already wants to make contact.
+- **Skills are grouped, not a flat list.** Thirty-eight items in one column give
+  a language the same weight as a database GUI, so nothing reads as a strength.
+  Tools that amount to "I have opened this" are gone, and UE4SS moved out — it's
+  real, but it belongs to the modding work on the projects page, not to a
+  professional skills block.
+- **University only.** A high school GPA next to two years of professional work
+  reads as not having enough else to say.
+
+### The résumé download is not a signpost
+
+The title screen's signs point to *places*. A download isn't a place, and a
+fifth sign that fires a file save breaks the metaphor the whole screen runs on.
+The download lives where someone already looking for it will be standing: the
+top of `/work`, the foot of each work detail page, and the About dialog's
+contact line.

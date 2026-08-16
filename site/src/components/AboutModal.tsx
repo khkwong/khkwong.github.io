@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import PixelModal from "./PixelModal";
-import { contact } from "../data/resume";
+import { contact } from "../data/profile";
 
 export default function AboutModal({ onClose }: { onClose: () => void }) {
   return (
@@ -26,10 +26,15 @@ export default function AboutModal({ onClose }: { onClose: () => void }) {
       <h3>Right Now</h3>
       <p>
         Systems engineer at Aristotle Capital Management, mostly building internal AI tooling
-        and data platforms. Always up for talking shop or hearing about an interesting problem
-        : <a href={`mailto:${contact.email}`}>{contact.email}</a> or{" "}
+        and data platforms — the <Link to="/work">work page</Link> goes into what that
+        actually looks like. Always up for talking shop or hearing about an interesting problem
+        : <a href={`mailto:${contact.email}`}>{contact.email}</a>,{" "}
         <a href={contact.linkedin} target="_blank" rel="noreferrer">
           LinkedIn
+        </a>
+        , or my{" "}
+        <a href={contact.resumePdf} download="Keith_Kwong_Resume.pdf">
+          résumé
         </a>
         .
       </p>

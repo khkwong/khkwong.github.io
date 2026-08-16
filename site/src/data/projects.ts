@@ -1,8 +1,7 @@
-export type ProjectBlock =
-  | { type: "p"; text: string }
-  | { type: "h2"; text: string }
-  | { type: "h3"; text: string }
-  | { type: "ul"; items: string[] };
+import type { ContentBlock } from "./content";
+
+/** Body blocks are shared with work detail pages — see data/content.ts. */
+export type ProjectBlock = ContentBlock;
 
 export type ProjectLink = { label: string; url: string };
 

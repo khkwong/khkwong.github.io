@@ -1,0 +1,240 @@
+/* Wider than the 1100px default because this page carries a sidebar. The
+   banner reads the same variable, so the title stays aligned with the content
+   column — see PageChrome.css. */
+.page-chrome.work-page {
+  --page-width: 1400px;
+}
+
+.work-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  max-width: var(--page-width);
+  margin: 0 auto;
+}
+
+/* Every section on this page — both columns — leads with a .scene-title of the
+   same height (see index.css). That's what makes the sidebar's Education panel
+   share a top edge with the timeline panel opposite it. Put a heading back
+   inside a panel and that column starts higher than the other one. */
+.work-timeline + .card-rail {
+  margin-top: clamp(1.5rem, 3vh, 2.25rem);
+}
+
+/* Facts-only strip on the brown panel, so it reads as a header for the shelf
+   below rather than as a first card. */
+.work-timeline {
+  padding: 0.4rem 1.25rem 0.8rem;
+  color: #fff1d2;
+  border-style: solid;
+  border-width: calc(6px * var(--s-ui));
+  border-image-source: url("/img/pixel/ui/panel-brown.png");
+  border-image-slice: 6 fill;
+  border-image-repeat: stretch;
+  image-rendering: pixelated;
+}
+
+.work-timeline-row {
+  padding: 0.6rem 0;
+  border-bottom: 2px solid rgba(255, 241, 210, 0.18);
+}
+
+.work-timeline-row:last-child {
+  border-bottom: none;
+}
+
+.work-timeline-head {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.work-timeline-company {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.62rem;
+  line-height: 1.6;
+  color: #ffe9a8;
+}
+
+.work-timeline-company a {
+  color: inherit;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.work-timeline-location {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 241, 210, 0.7);
+}
+
+.work-timeline-roles {
+  text-align: right;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.work-timeline-role {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.work-timeline-dates {
+  min-width: 11rem;
+  text-align: right;
+  color: rgba(255, 241, 210, 0.7);
+}
+
+/* --- The per-job disclosure ------------------------------------------------
+   Absorbs what used to be a separate "Also Shipped" section. Those entries
+   belong to the job they came out of, so the timeline is now the complete
+   record and the card grid stays a highlight reel. */
+.work-built {
+  margin-top: 0.5rem;
+}
+
+.work-built summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  padding: 0.25rem 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.5rem;
+  color: #ffe9a8;
+  cursor: pointer;
+  /* Kill the native triangle in both engines; the caret below replaces it so
+     it can be a crisp CSS shape rather than a font glyph. */
+  list-style: none;
+}
+
+.work-built summary::-webkit-details-marker {
+  display: none;
+}
+
+.work-built summary:hover,
+.work-built summary:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
+.work-built-caret {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+  transition: transform 0.12s ease;
+}
+
+.work-built[open] .work-built-caret {
+  transform: rotate(90deg);
+}
+
+.work-built ul {
+  margin: 0.6rem 0 0.3rem;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+
+.work-built li {
+  margin-bottom: 0.45rem;
+}
+
+.work-built a {
+  color: #ffe9a8;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* --- Sidebar --------------------------------------------------------------- */
+.work-side {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.work-panel {
+  padding: 0.5rem 1.25rem 1.25rem;
+  color: #4a2a15;
+  border-style: solid;
+  border-width: calc(6px * var(--s-ui));
+  border-image-source: url("/img/pixel/ui/panel-tan.png");
+  border-image-slice: 6 fill;
+  border-image-repeat: stretch;
+  image-rendering: pixelated;
+}
+
+.work-panel h3 {
+  margin: 0 0 0.3rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.52rem;
+  color: #a3703a;
+}
+
+.work-panel p {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.work-panel a {
+  color: #8a4f1c;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.work-edu-school {
+  font-weight: 700;
+}
+
+.work-edu-meta,
+.work-edu-coursework {
+  color: #6d4b27;
+}
+
+.work-edu-coursework {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+}
+
+.work-skill-group {
+  margin-bottom: 0.9rem;
+}
+
+.work-skill-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Sidebar drops below the work once there isn't room for both. Education and
+   skills are supporting evidence, so they're the half that gives way. */
+@media (max-width: 1080px) {
+  .work-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Stacked timeline rows: right-aligned dates against a left-aligned company
+   stop reading as a pair once they wrap onto separate lines. */
+@media (max-width: 640px) {
+  .work-timeline-roles,
+  .work-timeline-role,
+  .work-timeline-dates {
+    text-align: left;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-built-caret {
+    transition: none;
+  }
+}

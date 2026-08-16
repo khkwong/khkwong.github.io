@@ -1,0 +1,88 @@
+/* Same 9-slice panel as ProjectCard — see NOTES.md, border-image not
+   background-repeat — but laid out for text rather than around art. */
+.work-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #4a2a15;
+  padding: 0.4rem 0.6rem 0.5rem;
+  border-style: solid;
+  border-width: calc(6px * var(--s-ui));
+  border-image-source: url("/img/pixel/ui/panel-tan.png");
+  border-image-slice: 6 fill;
+  border-image-repeat: stretch;
+  image-rendering: pixelated;
+  transition: transform 0.12s ease;
+}
+
+/* Lifts the same 5px the signposts and project cards do. */
+.work-card:hover,
+.work-card:focus-visible {
+  transform: translateY(-5px);
+  outline: none;
+}
+
+.work-card:focus-visible {
+  filter: brightness(1.06);
+}
+
+.work-card-company {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #a3703a;
+}
+
+.work-card-title {
+  margin: 0.6rem 0 0.5rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #8a4f1c;
+}
+
+.work-card-summary {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* Pushed to the bottom so the footer rows line up across a grid row even when
+   the summaries differ in length. */
+.work-card-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 0.9rem;
+}
+
+.work-card-tech {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.work-card-chip {
+  padding: 0.25rem 0.4rem;
+  font-size: 0.62rem;
+  line-height: 1.2;
+  color: #fff1d2;
+  background: #a3703a;
+}
+
+.work-card-dates {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.5rem;
+  white-space: nowrap;
+  color: #8a6a4a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-card {
+    transition: none;
+  }
+}
